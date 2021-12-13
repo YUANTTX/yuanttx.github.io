@@ -8,19 +8,19 @@
   <meta name="renderer" content="webkit">
 
   
-  <title>通路富集分析 | YuanTTX的博客</title>
+  <title>Gene ID 转换 | YuanTTX的博客</title>
 
   <link rel="shortcut icon" href="/images/favicon.png">
   <link rel="alternate" href="/atom.xml" title="YuanTTX的博客" type="application/atom+xml">
-  <meta name="description" content="通路富集分析主要包括：GO和KEGG分析。进行通路富集分析主要使用DAVIDE网站进行，使用R软件也可以分析，但也是通过连接到DAVIDE数据库进行的。">
+  <meta name="description" content="GEO中的表达数据大多以探针形式保存，需要转换为常用的gene symbol形式。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="通路富集分析">
-<meta property="og:url" content="https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/index.html">
+<meta property="og:title" content="Gene ID 转换">
+<meta property="og:url" content="https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/index.html">
 <meta property="og:site_name" content="YuanTTX的博客">
-<meta property="og:description" content="通路富集分析主要包括：GO和KEGG分析。进行通路富集分析主要使用DAVIDE网站进行，使用R软件也可以分析，但也是通过连接到DAVIDE数据库进行的。">
+<meta property="og:description" content="GEO中的表达数据大多以探针形式保存，需要转换为常用的gene symbol形式。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-11-28T02:34:14.699Z">
-<meta property="article:modified_time" content="2021-11-28T02:41:49.536Z">
+<meta property="article:published_time" content="2021-12-13T07:34:27.461Z">
+<meta property="article:modified_time" content="2021-12-13T07:34:27.462Z">
 <meta property="article:author" content="YuanTTX">
 <meta name="twitter:card" content="summary">
 
@@ -30,7 +30,7 @@
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="YuanTTX的博客">
-  <meta name="msapplication-starturl" content="https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/">
+  <meta name="msapplication-starturl" content="https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/">
   <meta name="msapplication-navbutton-color" content="#9C27B0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="YuanTTX的博客">
@@ -38,7 +38,7 @@
   <link rel="apple-touch-icon" href="/images/favicon.png">
 
   
-    <link rel="canonical" href="https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/">
+    <link rel="canonical" href="https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/">
   
 
   
@@ -179,11 +179,11 @@
   <style>#main article .mdui-card-content .center-block{display:block!important;margin-right:auto!important;margin-left:auto!important}</style>
   <article class="mdui-card mdui-m-b-5">
     <header class="mdui-card-media">
-      <img src="/images/random/material-16.png" style="max-height: 240px;">
+      <img src="/images/random/material-5.png" style="max-height: 240px;">
       <div class="mdui-card-media-covered">
         <div class="mdui-card-primary">
-          <div class="mdui-card-primary-title">通路富集分析</div>
-          <div class="mdui-card-primary-subtitle"><i class="iconfont">&#xe697;</i> 2021-11-28 / <i class="iconfont">&#xe601;</i> YuanTTX</div>
+          <div class="mdui-card-primary-title">Gene ID 转换</div>
+          <div class="mdui-card-primary-subtitle"><i class="iconfont">&#xe697;</i> 2021-12-13 / <i class="iconfont">&#xe601;</i> YuanTTX</div>
         </div>
       </div>
       <div class="mdui-card-menu">
@@ -195,7 +195,7 @@
             
             <li class="mdui-menu-item" disabled>
               
-                <img src="http://qr.liantu.com/api.php?w=246&m=10&text=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/">
+                <img src="http://qr.liantu.com/api.php?w=246&m=10&text=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/">
               
             </li>
           </ul>
@@ -204,41 +204,47 @@
           <button class="mdui-btn mdui-btn-icon mdui-text-color-white" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="mdui-icon material-icons">share</i></button>
           <ul class="mdui-menu" id="share_menu">
             <li class="mdui-menu-item">
-              <a href="http://service.weibo.com/share/share.php?appkey=&title=通路富集分析&url=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/&pic=https://yuanttx.github.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
+              <a href="http://service.weibo.com/share/share.php?appkey=&title=Gene ID 转换&url=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/&pic=https://yuanttx.github.io/images/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://twitter.com/intent/tweet?text=通路富集分析&url=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/&via=YuanTTX" target="_blank" class="mdui-ripple">分享到 Twitter</a>
+              <a href="https://twitter.com/intent/tweet?text=Gene ID 转换&url=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/&via=YuanTTX" target="_blank" class="mdui-ripple">分享到 Twitter</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.facebook.com/sharer/sharer.php?u=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://plus.google.com/share?url=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/" target="_blank" class="mdui-ripple">分享到 Google+</a>
+              <a href="https://plus.google.com/share?url=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/" target="_blank" class="mdui-ripple">分享到 Google+</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/&title=通路富集分析" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
+              <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/&title=Gene ID 转换" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="http://connect.qq.com/widget/shareqq/index.html?site=YuanTTX的博客&title=通路富集分析&pics=https://yuanttx.github.io/images/favicon.png&url=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/" target="_blank" class="mdui-ripple">分享到 QQ</a>
+              <a href="http://connect.qq.com/widget/shareqq/index.html?site=YuanTTX的博客&title=Gene ID 转换&pics=https://yuanttx.github.io/images/favicon.png&url=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/" target="_blank" class="mdui-ripple">分享到 QQ</a>
             </li>
             <li class="mdui-menu-item">
-              <a href="https://telegram.me/share/url?url=https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/&text=通路富集分析" target="_blank" class="mdui-ripple">分享到 Telegram</a>
+              <a href="https://telegram.me/share/url?url=https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/&text=Gene ID 转换" target="_blank" class="mdui-ripple">分享到 Telegram</a>
             </li>
           </ul>
         
       </div>
     </header>
     <div class="mdui-card-content mdui-typo">
-      <p>通路富集分析主要包括：GO和KEGG分析。进行通路富集分析主要使用DAVIDE网站进行，使用R软件也可以分析，但也是通过连接到DAVIDE数据库进行的。</p>
+      <p>GEO中的表达数据大多以探针形式保存，需要转换为常用的gene symbol形式。</p>
 <span id="more"></span>
 
-<h1 id="通路富集分析"><a href="#通路富集分析" class="headerlink" title="通路富集分析"></a>通路富集分析</h1><h4 id="1、GO富集分析"><a href="#1、GO富集分析" class="headerlink" title="1、GO富集分析"></a>1、GO富集分析</h4><p>GO全称Gene Ont，基因本体。</p>
-<h4 id="2、KEGG通路富集分析"><a href="#2、KEGG通路富集分析" class="headerlink" title="2、KEGG通路富集分析"></a>2、KEGG通路富集分析</h4><p>KEGG全称。</p>
+<h1 id="Gene-ID-转换"><a href="#Gene-ID-转换" class="headerlink" title="Gene ID 转换"></a>Gene ID 转换</h1><h2 id="1、数据准备"><a href="#1、数据准备" class="headerlink" title="1、数据准备"></a>1、数据准备</h2><h4 id="1、表达数据"><a href="#1、表达数据" class="headerlink" title="1、表达数据"></a>1、表达数据</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GEOall &lt;- getGEO(&#x27;GSE53963&#x27;,destdir = &#x27;F:/DataBase/GEO/OV/GSE53963/&#x27;,getGPL = F,AnnotGPL = F)</span><br><span class="line">GEOexp &lt;- exprs(GEOall[[1]])</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、注释文件"><a href="#2、注释文件" class="headerlink" title="2、注释文件"></a>2、注释文件</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gpl &lt;- read.table(&#x27;F:/DataBase/GEO/GPL/GPL6480-9577.txt&#x27;,header = T,</span><br><span class="line">                  fill = T,quote = &#x27;&#x27;,sep = &#x27;\t&#x27;,comment.char = &#x27;#&#x27;)</span><br><span class="line">names(gpl)</span><br></pre></td></tr></table></figure>
+
+<h2 id="2、ID-转换函数"><a href="#2、ID-转换函数" class="headerlink" title="2、ID 转换函数"></a>2、ID 转换函数</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">suppressMessages(library(dplyr))</span><br><span class="line"></span><br><span class="line">Aff2Symbol &lt;- function(indat,iddat,fromID,toID)&#123;</span><br><span class="line">  # AffID &lt;- read.table(&#x27;GPL570-55999.txt&#x27;,header = T,fill = T,quote = &#x27;&#x27;,sep = &#x27;\t&#x27;,comment.char = &#x27;#&#x27;)</span><br><span class="line">  ExpDat &lt;- as.data.frame(indat)</span><br><span class="line">  ExpDat$name &lt;- rownames(ExpDat)</span><br><span class="line">  names(ExpDat)[names(ExpDat) == &#x27;name&#x27;] &lt;- fromID</span><br><span class="line">  AffID &lt;- iddat[,c(fromID,toID)]</span><br><span class="line">  </span><br><span class="line">  ExpDat &lt;- inner_join(AffID,ExpDat,by = fromID)</span><br><span class="line">  ExpDat &lt;- ExpDat[!duplicated(ExpDat[,toID]),]</span><br><span class="line">  rownames(ExpDat) &lt;- ExpDat[,toID]</span><br><span class="line">  ExpDat &lt;- ExpDat[,-c(1:2)]</span><br><span class="line"></span><br><span class="line">  return(ExpDat)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、正式转换"><a href="#3、正式转换" class="headerlink" title="3、正式转换"></a>3、正式转换</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># GEOexp表达数据；gpl平台文件；fromID探针列的列名；toID目标symbol的列名</span><br><span class="line">GEOexp2 &lt;- Aff2Symbol(indat = GEOexp,iddat = gpl,fromID = &#x27;ID&#x27;,toID = &#x27;GENE_SYMBOL&#x27;)</span><br></pre></td></tr></table></figure>
+
 
       
       <blockquote>
         
-        <strong>本文链接：</strong><br><a href="https://yuanttx.github.io/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/">https://yuanttx.github.io/2021/11/28/2021.11.28 通路富集分析/</a>
+        <strong>本文链接：</strong><br><a href="https://yuanttx.github.io/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/">https://yuanttx.github.io/2021/12/13/2021.12.13 Gene-ID-转换/</a>
       </blockquote>
     </div>
     <footer class="mdui-card-actions">
@@ -256,15 +262,10 @@
 
   <nav id="paginator">
     
-      <a rel="prev" class="extend prev" href="/2021/12/13/2021.12.13%20Gene-ID-%E8%BD%AC%E6%8D%A2/">
-        <button aria-label="prev" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_back</i></button>
-        <span class="mdui-p-x-3" mdui-tooltip="{content: 'Gene ID 转换'}">上一篇</span>
-      </a>
-    
     <div class="spacer"></div>
     
-      <a rel="next" class="extend next" href="/2021/11/28/2021.11.22%20%E5%B7%AE%E5%BC%82%E5%88%86%E6%9E%90/">
-        <span class="mdui-p-x-3" mdui-tooltip="{content: '差异分析'}">下一篇</span>
+      <a rel="next" class="extend next" href="/2021/11/28/2021.11.28%20%E9%80%9A%E8%B7%AF%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/">
+        <span class="mdui-p-x-3" mdui-tooltip="{content: '通路富集分析'}">下一篇</span>
         <button aria-label="next" class="mdui-btn mdui-btn-raised mdui-btn-icon mdui-color-theme-accent mdui-ripple"><i class="mdui-icon material-icons">arrow_forward</i></button>
       </a>
     
