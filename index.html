@@ -180,7 +180,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/03/18/2024.03.19.%E4%BD%BF%E7%94%A8frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/2024/03/18/2024.03.19.%E4%BD%BF%E7%94%A8frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" class="post-title-link" itemprop="url">使用frp实现内网穿透</a>
         </h2>
 
         <div class="post-meta-container">
@@ -198,7 +198,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-19 09:44:48" itemprop="dateModified" datetime="2024-03-19T09:44:48+08:00">2024-03-19</time>
+      <time title="修改时间：2024-03-19 09:51:10" itemprop="dateModified" datetime="2024-03-19T09:51:10+08:00">2024-03-19</time>
     </span>
 
   
@@ -211,37 +211,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">title: 使用frp实现内网穿透</span><br></pre></td></tr></table></figure>
-
-<p>frp可以将内网端口暴露在公网上，可以方便的进行远程ssh、远程桌面。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--more--&gt;</span><br></pre></td></tr></table></figure>
-
-<p>frp包含两个组件，</p>
-<h5 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h5><p>frp<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases/download/v0.55.1/frp_0.55.1_linux_amd64.tar.gz">下载路径</a></p>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 解压</span><br><span class="line">tar -zxvf frp_*_linux_amd64.tar.gz</span><br><span class="line">cd frp_*_linux_amd64</span><br><span class="line"># 解压后会得到两个可执行文件文件，一个是frps，需要安装在具有公网的主机上；一个是frpc，需要安装在暴露端口的主机上。</span><br></pre></td></tr></table></figure>
-
-<h4 id="配置frps服务"><a href="#配置frps服务" class="headerlink" title="配置frps服务"></a>配置frps服务</h4><h5 id="设置frps服务器信息"><a href="#设置frps服务器信息" class="headerlink" title="设置frps服务器信息"></a>设置frps服务器信息</h5><p>编辑frps.ini文件，写入如下信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">bind_port = 7000</span><br><span class="line"></span><br><span class="line">token = 123456789token   # frpc连接到frps时需要使用</span><br><span class="line"></span><br><span class="line">dashboard_port = 4560 # frps面板的端口，查看frp连接信息</span><br><span class="line">dashboard_user = frps # frps面板的用户，查看frp连接信息</span><br><span class="line">dashboard_pwd = 123456789 # frps面板的密码，查看frp连接信息</span><br><span class="line"></span><br><span class="line">max_pool_count = 5</span><br><span class="line">log_file = /home/hkhost/frp_0.45.0_linux_amd64/frps.log  # frps日志保存位置</span><br><span class="line">log_level = info</span><br><span class="line">log_max_days = 3</span><br></pre></td></tr></table></figure>
-
-<h5 id="设置frps开机自启"><a href="#设置frps开机自启" class="headerlink" title="设置frps开机自启"></a>设置frps开机自启</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /lib/systemd/system/frps.service</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 在frps.service里写入以下内容</span><br><span class="line">[Unit]</span><br><span class="line">Description=frps service</span><br><span class="line">After=network.target network-online.target syslog.target</span><br><span class="line">Wants=network.target network-online.target</span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">#启动服务的命令（此处写你的frps的实际安装目录）</span><br><span class="line">ExecStart=/home/hkhost/frp_0.45.0_linux_amd64/frps -c /home/hkhost/frp_0.45.0_linux_amd64/frps.ini</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-
-<p>启动frps</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 启动 frps</span><br><span class="line">sudo systemctl start frps</span><br><span class="line">再打开自启动</span><br><span class="line">sudo systemctl enable frps</span><br></pre></td></tr></table></figure>
-
-<h4 id="配置frpc"><a href="#配置frpc" class="headerlink" title="配置frpc"></a>配置frpc</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">server_addr = xxx.xxx.xxx.xxx # frps服务所在的公网ip</span><br><span class="line">server_port = 7000 #服务端端口</span><br><span class="line">token = 123456789token #连接服务端口令</span><br><span class="line">[ssh]</span><br><span class="line">type = tcp</span><br><span class="line">local_ip = 127.0.0.1</span><br><span class="line">local_port = 22  # 需要暴露的本地端口</span><br><span class="line">remote_port = 6000  # 暴露在公网的6000端口，访问公网的6000端口就是在访问本地的22端口</span><br></pre></td></tr></table></figure>
-
-<h5 id="openwrt-运行-frpc"><a href="#openwrt-运行-frpc" class="headerlink" title="openwrt 运行 frpc"></a>openwrt 运行 frpc</h5><p>直接从仓库安装，填写好对应的信息即可</p>
-<h5 id="window10-运行-frpc"><a href="#window10-运行-frpc" class="headerlink" title="window10 运行 frpc"></a>window10 运行 frpc</h5><p>1、使用任务管理中使用自订计划调用frpc启动脚本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 编辑vbs脚本</span><br><span class="line">vi frpcStart.vbs</span><br><span class="line"># 写入如下信息</span><br><span class="line">set ws=WScript.CreateObject(&quot;WScript.Shell&quot;)</span><br><span class="line">ws.Run &quot;d:\software\frp_0.45.0_windows_amd64\frpc.exe -c d:\software\frp_0.45.0_windows_amd64\frpc.ini&quot;,0</span><br></pre></td></tr></table></figure>
-
-<p>上面的操作容易导致开启多个frpc服务，不推荐使用</p>
-<p>2、使用任务管理器定期检查frpc是否在运行，不在运行就启动</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 编辑vbs脚本</span><br><span class="line">vi frpcStart.vbs</span><br><span class="line"># 写入如下信息</span><br><span class="line">Set ws = WScript.CreateObject(&quot;WScript.Shell&quot;)</span><br><span class="line">Function IsProcessRunning(processName)</span><br><span class="line">    Dim objWMIService, colProcesses, objProcess</span><br><span class="line">    Set objWMIService = GetObject(&quot;winmgmts:\\.\root\cimv2&quot;)</span><br><span class="line">    Set colProcesses = objWMIService.ExecQuery(&quot;Select * from Win32_Process Where Name =&#x27;&quot; &amp; processName &amp; &quot;&#x27;&quot;)</span><br><span class="line">    If colProcesses.Count &gt; 0 Then</span><br><span class="line">        IsProcessRunning = True</span><br><span class="line">    Else</span><br><span class="line">        IsProcessRunning = False</span><br><span class="line">    End If</span><br><span class="line">End Function</span><br><span class="line">If Not IsProcessRunning(&quot;frpc.exe&quot;) Then</span><br><span class="line">    ws.Run &quot;d:\software\frp_0.45.0_windows_amd64\frpc.exe -c d:\software\frp_0.45.0_windows_amd64\frpc.ini&quot;, 0</span><br><span class="line">End If</span><br></pre></td></tr></table></figure>
-
-<h5 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h5><p>如果服务端和客户端都是linux，那么都使用frp_0.45.0_linux_amd64.tar.gz即可。如果服务端是linux，客户端是windwos，那么服务端使用frp_0.45.0_linux_amd64.tar.gz，那么客户端使用frp_0.45.0_windows_amd64.tar.gz里的frpc.exe.。</p>
-
+          <p>frp可以将内网端口暴露在公网上，可以方便的进行远程ssh、远程桌面。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/03/18/2024.03.19.%E4%BD%BF%E7%94%A8frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
