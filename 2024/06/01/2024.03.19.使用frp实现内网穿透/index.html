@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"yuanttx.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="frp可以将内网端口暴露在公网上，可以方便的进行远程ssh、远程桌面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用frp实现内网穿透">
+<meta property="og:url" content="https://yuanttx.github.io/2024/06/01/2024.03.19.%E4%BD%BF%E7%94%A8frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/index.html">
+<meta property="og:site_name" content="YuanTTX的博客">
+<meta property="og:description" content="frp可以将内网端口暴露在公网上，可以方便的进行远程ssh、远程桌面。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-01T06:16:34.949Z">
+<meta property="article:modified_time" content="2024-06-01T06:16:34.949Z">
+<meta property="article:author" content="YUANTTX">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://yuanttx.github.io/2024/06/01/2024.03.19.%E4%BD%BF%E7%94%A8frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://yuanttx.github.io/2024/06/01/2024.03.19.%E4%BD%BF%E7%94%A8frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/","path":"2024/06/01/2024.03.19.使用frp实现内网穿透/","title":"使用frp实现内网穿透"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用frp实现内网穿透 | YuanTTX的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">YuanTTX的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number"></span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEfrps%E6%9C%8D%E5%8A%A1"><span class="nav-number"></span> <span class="nav-text">配置frps服务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEfrps%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%A1%E6%81%AF"><span class="nav-number">1.</span> <span class="nav-text">设置frps服务器信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AEfrps%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF"><span class="nav-number">2.</span> <span class="nav-text">设置frps开机自启</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEfrpc"><span class="nav-number"></span> <span class="nav-text">配置frpc</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#openwrt-%E8%BF%90%E8%A1%8C-frpc"><span class="nav-number">1.</span> <span class="nav-text">openwrt 运行 frpc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#window10-%E8%BF%90%E8%A1%8C-frpc"><span class="nav-number">2.</span> <span class="nav-text">window10 运行 frpc</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%85%B6%E5%AE%83"><span class="nav-number">3.</span> <span class="nav-text">其它</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">YUANTTX</p>
+  <div class="site-description" itemprop="description">年年岁岁花相似，岁岁年年人不同</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yuanttx.github.io/2024/06/01/2024.03.19.%E4%BD%BF%E7%94%A8frp%E5%AE%9E%E7%8E%B0%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="YUANTTX">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YuanTTX的博客">
+      <meta itemprop="description" content="年年岁岁花相似，岁岁年年人不同">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用frp实现内网穿透 | YuanTTX的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用frp实现内网穿透
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-06-01 06:16:34" itemprop="dateCreated datePublished" datetime="2024-06-01T06:16:34+00:00">2024-06-01</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>frp可以将内网端口暴露在公网上，可以方便的进行远程ssh、远程桌面。</p>
+<span id="more"></span>
+
+<h5 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h5><p>frp<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases/download/v0.55.1/frp_0.55.1_linux_amd64.tar.gz">下载路径</a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压</span></span><br><span class="line">tar -zxvf frp_*_linux_amd64.tar.gz</span><br><span class="line">cd frp_*_linux_amd64</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">解压后会得到两个可执行文件文件，一个是frps，需要安装在具有公网的主机上；一个是frpc，需要安装在暴露端口的主机上。</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置frps服务"><a href="#配置frps服务" class="headerlink" title="配置frps服务"></a>配置frps服务</h4><h5 id="设置frps服务器信息"><a href="#设置frps服务器信息" class="headerlink" title="设置frps服务器信息"></a>设置frps服务器信息</h5><p>编辑frps.ini文件，写入如下信息</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">bind_port</span> = <span class="number">7000</span></span><br><span class="line"></span><br><span class="line"><span class="attr">token</span> = <span class="number">123456789</span>token   <span class="comment"># frpc连接到frps时需要使用</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dashboard_port</span> = <span class="number">4560</span> <span class="comment"># frps面板的端口，查看frp连接信息</span></span><br><span class="line"><span class="attr">dashboard_user</span> = frps <span class="comment"># frps面板的用户，查看frp连接信息</span></span><br><span class="line"><span class="attr">dashboard_pwd</span> = <span class="number">123456789</span> <span class="comment"># frps面板的密码，查看frp连接信息</span></span><br><span class="line"></span><br><span class="line"><span class="attr">max_pool_count</span> = <span class="number">5</span></span><br><span class="line"><span class="attr">log_file</span> = /home/hkhost/frp_0.<span class="number">45.0</span>_linux_amd64/frps.log  <span class="comment"># frps日志保存位置</span></span><br><span class="line"><span class="attr">log_level</span> = info</span><br><span class="line"><span class="attr">log_max_days</span> = <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="设置frps开机自启"><a href="#设置frps开机自启" class="headerlink" title="设置frps开机自启"></a>设置frps开机自启</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /lib/systemd/system/frps.service</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在frps.service里写入以下内容</span></span><br><span class="line"><span class="section">[Unit]</span></span><br><span class="line"><span class="attr">Description</span>=frps service</span><br><span class="line"><span class="attr">After</span>=network.target network-<span class="literal">on</span>line.target syslog.target</span><br><span class="line"><span class="attr">Wants</span>=network.target network-<span class="literal">on</span>line.target</span><br><span class="line"><span class="section">[Service]</span></span><br><span class="line"><span class="attr">Type</span>=simple</span><br><span class="line"><span class="comment">#启动服务的命令（此处写你的frps的实际安装目录）</span></span><br><span class="line"><span class="attr">ExecStart</span>=/home/hkhost/frp_0.<span class="number">45.0</span>_linux_amd64/frps -c /home/hkhost/frp_0.<span class="number">45.0</span>_linux_amd64/frps.ini</span><br><span class="line"><span class="section">[Install]</span></span><br><span class="line"><span class="attr">WantedBy</span>=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>启动frps</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动 frps</span></span><br><span class="line">sudo systemctl start frps</span><br><span class="line">再打开自启动</span><br><span class="line">sudo systemctl enable frps</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置frpc"><a href="#配置frpc" class="headerlink" title="配置frpc"></a>配置frpc</h4><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = xxx.xxx.xxx.xxx <span class="comment"># frps服务所在的公网ip</span></span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7000</span> <span class="comment">#服务端端口</span></span><br><span class="line"><span class="attr">token</span> = <span class="number">123456789</span>token <span class="comment">#连接服务端口令</span></span><br><span class="line"><span class="section">[ssh]</span></span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">22</span>  <span class="comment"># 需要暴露的本地端口</span></span><br><span class="line"><span class="attr">remote_port</span> = <span class="number">6000</span>  <span class="comment"># 暴露在公网的6000端口，访问公网的6000端口就是在访问本地的22端口</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="openwrt-运行-frpc"><a href="#openwrt-运行-frpc" class="headerlink" title="openwrt 运行 frpc"></a>openwrt 运行 frpc</h5><p>直接从仓库安装，填写好对应的信息即可</p>
+<h5 id="window10-运行-frpc"><a href="#window10-运行-frpc" class="headerlink" title="window10 运行 frpc"></a>window10 运行 frpc</h5><p>1、使用任务管理中使用自订计划调用frpc启动脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 编辑vbs脚本</span><br><span class="line">vi frpcStart.vbs</span><br><span class="line"># 写入如下信息</span><br><span class="line">set ws=WScript.CreateObject(&quot;WScript.Shell&quot;)</span><br><span class="line">ws.Run &quot;d:\software\frp_0.45.0_windows_amd64\frpc.exe -c d:\software\frp_0.45.0_windows_amd64\frpc.ini&quot;,0</span><br></pre></td></tr></table></figure>
+
+<p>上面的操作容易导致开启多个frpc服务，不推荐使用</p>
+<p>2、使用任务管理器定期检查frpc是否在运行，不在运行就启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"># 编辑vbs脚本</span><br><span class="line">vi frpcStart.vbs</span><br><span class="line"># 写入如下信息</span><br><span class="line">Set ws = WScript.CreateObject(&quot;WScript.Shell&quot;)</span><br><span class="line">Function IsProcessRunning(processName)</span><br><span class="line">    Dim objWMIService, colProcesses, objProcess</span><br><span class="line">    Set objWMIService = GetObject(&quot;winmgmts:\\.\root\cimv2&quot;)</span><br><span class="line">    Set colProcesses = objWMIService.ExecQuery(&quot;Select * from Win32_Process Where Name =&#x27;&quot; &amp; processName &amp; &quot;&#x27;&quot;)</span><br><span class="line">    If colProcesses.Count &gt; 0 Then</span><br><span class="line">        IsProcessRunning = True</span><br><span class="line">    Else</span><br><span class="line">        IsProcessRunning = False</span><br><span class="line">    End If</span><br><span class="line">End Function</span><br><span class="line">If Not IsProcessRunning(&quot;frpc.exe&quot;) Then</span><br><span class="line">    ws.Run &quot;d:\software\frp_0.45.0_windows_amd64\frpc.exe -c d:\software\frp_0.45.0_windows_amd64\frpc.ini&quot;, 0</span><br><span class="line">End If</span><br></pre></td></tr></table></figure>
+
+<h5 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h5><p>如果服务端和客户端都是linux，那么都使用frp_0.45.0_linux_amd64.tar.gz即可。如果服务端是linux，客户端是windwos，那么服务端使用frp_0.45.0_linux_amd64.tar.gz，那么客户端使用frp_0.45.0_windows_amd64.tar.gz里的frpc.exe.。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/01/hello-world/" rel="prev" title="Hello World">
+                  <i class="fa fa-angle-left"></i> Hello World
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/06/01/2024.03.12.%E4%BF%AE%E6%94%B9R%E5%8C%85%E6%BA%90%E4%BB%A3%E7%A0%81/" rel="next" title="修改R包源代码">
+                  修改R包源代码 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
